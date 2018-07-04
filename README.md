@@ -8,7 +8,9 @@ RHEL/CentOS - RPM Fusion is a merger of Dribble, Freshrpms, and Livna
 
 ## Requirements
 
-None
+This role requires that you have the epel repository installed.
+
+ * https://galaxy.ansible.com/linuxhq/epel/
 
 ## Role Variables
 
