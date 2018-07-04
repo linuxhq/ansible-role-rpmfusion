@@ -1,0 +1,10 @@
+---
+- name: Attempting to loop rpmfusion includes
+  tags: rpmfusion
+  include_tasks: rpmfusion_loop.yml
+  loop:
+    - free
+    - nonfree
+  loop_control:
+    loop_var: rpmfusion_repository
+...

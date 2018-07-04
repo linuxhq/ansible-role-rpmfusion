@@ -1,0 +1,24 @@
+[rpmfusion-{{ rpmfusion_repository }}-updates]
+name=RPM Fusion for EL {{ rpmfusion_dist }} - {{ rpmfusion_repository|capitalize }} - Updates
+#baseurl=http://download1.rpmfusion.org/{{ rpmfusion_repository }}/el/updates/{{ rpmfusion_dist }}/$basearch/
+mirrorlist=http://mirrors.rpmfusion.org/mirrorlist?repo={{ rpmfusion_repository }}-el-updates-released-{{ rpmfusion_dist }}&arch=$basearch
+enabled={{ '1' if rpmfusion_repository_nonfree_updates|bool else '0' }}
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-{{ rpmfusion_repository }}-el-{{ rpmfusion_dist }}
+
+[rpmfusion-{{ rpmfusion_repository }}-updates-debuginfo]
+name=RPM Fusion for EL {{ rpmfusion_dist }} - {{ rpmfusion_repository|capitalize }} - Updates Debug
+#baseurl=http://download1.rpmfusion.org/{{ rpmfusion_repository }}/el/updates/{{ rpmfusion_dist }}/$basearch/debug/
+mirrorlist=http://mirrors.rpmfusion.org/mirrorlist?repo={{ rpmfusion_repository }}-el-updates-released-debug-{{ rpmfusion_dist }}&arch=$basearch
+enabled={{ '1' if rpmfusion_repository_nonfree_updates_debuginfo|bool else '0' }}
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-{{ rpmfusion_repository }}-el-{{ rpmfusion_dist }}
+
+[rpmfusion-{{ rpmfusion_repository }}-updates-source]
+name=RPM Fusion for EL {{ rpmfusion_dist }} - {{ rpmfusion_repository|capitalize }} - Updates Source
+#baseurl=http://download1.rpmfusion.org/{{ rpmfusion_repository }}/el/updates/{{ rpmfusion_dist }}/SRPMS/
+mirrorlist=http://mirrors.rpmfusion.org/mirrorlist?repo={{ rpmfusion_repository }}-el-updates-released-source-{{ rpmfusion_dist }}&arch=$basearch
+enabled={{ '1' if rpmfusion_repository_nonfree_updates_source|bool else '0' }}
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-{{ rpmfusion_repository }}-el-{{ rpmfusion_dist }}
+

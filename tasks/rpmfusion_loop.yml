@@ -1,0 +1,73 @@
+---
+- name: Attempting to generate temporary file
+  tags: rpmfusion
+  tempfile:
+    prefix: rpmfusion.
+    state: file
+    suffix: .rpm
+  register: rpmfusion_tempfile
+
+- name: Attempting to download package to temporary location
+  tags: rpmfusion
+  get_url:
+    dest: "{{ rpmfusion_tempfile.path }}"
+    force: yes
+    url: "{{ rpmfusion_baseurl }}/{{ rpmfusion_repository }}/el/rpmfusion-{{ rpmfusion_repository }}-release-{{ rpmfusion_dist }}.noarch.rpm"
+  register: rpmfusion_get_url
+  when: rpmfusion_tempfile is success
+
+- name: Ensure that the rpmfusion-{{ rpmfusion_repository }}-release package is installed
+  tags: rpmfusion
+  become: true
+  yum:
+    name: "{{ rpmfusion_tempfile.path }}"
+    state: present
+  register: rpmfusion_yum
+  when: rpmfusion_get_url is success
+
+- name: Attempting to purge temporary package from the filesystem
+  tags: rpmfusion
+  file:
+    path: "{{ rpmfusion_tempfile.path }}"
+    state: absent
+  when:
+    - rpmfusion_tempfile is success
+    - rpmfusion_yum is success
+
+- name: Attempting to overlay rpmfusion repository configurations
+  tags: rpmfusion
+  become: true
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dst }}"
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - { src: "rpmfusion-{{ rpmfusion_repository }}-updates.repo.j2",
+        dst: "/etc/yum.repos.d/rpmfusion-{{ rpmfusion_repository }}-updates.repo" }
+    - { src: "rpmfusion-{{ rpmfusion_repository }}-updates-testing.repo.j2",
+        dst: "/etc/yum.repos.d/rpmfusion-{{ rpmfusion_repository }}-updates-testing.repo" }
+  when: rpmfusion_yum is success
+
+- name: Ensure that the rpmfusion gpg keys are installed
+  tags: rpmfusion
+  become: true
+  rpm_key:
+    key: "/etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-{{ rpmfusion_repository }}-el-{{ rpmfusion_dist }}"
+    state: present
+  when: rpmfusion_yum is success
+
+- name: Ensure that the required rpmfusion packages are installed
+  tags: rpmfusion
+  become: true
+  yum:
+    disablerepo: "{{ rpmfusion_disablerepo|join(',') }}"
+    enablerepo: "{{ rpmfusion_enablerepo|join(',') }}"
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ rpmfusion_packages }}"
+  when:
+    - rpmfusion_packages|length > 0
+    - rpmfusion_yum is success
+...

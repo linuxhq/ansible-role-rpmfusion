@@ -1,0 +1,19 @@
+---
+rpmfusion_baseurl: 'https://download1.rpmfusion.org'
+rpmfusion_dist: "{{ ansible_distribution_major_version }}"
+rpmfusion_disablerepo: []
+rpmfusion_enablerepo: []
+rpmfusion_packages: []
+rpmfusion_repository_free_updates: false
+rpmfusion_repository_free_updates_debuginfo: false
+rpmfusion_repository_free_updates_source: false
+rpmfusion_repository_free_updates_testing: false
+rpmfusion_repository_free_updates_testing_debuginfo: false
+rpmfusion_repository_free_updates_testing_source: false
+rpmfusion_repository_nonfree_updates: false
+rpmfusion_repository_nonfree_updates_debuginfo: false
+rpmfusion_repository_nonfree_updates_source: false
+rpmfusion_repository_nonfree_updates_testing: false
+rpmfusion_repository_nonfree_updates_testing_debuginfo: false
+rpmfusion_repository_nonfree_updates_testing_source: false
+...
