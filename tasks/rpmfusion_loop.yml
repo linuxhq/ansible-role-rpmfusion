@@ -43,11 +43,13 @@
     owner: root
     group: root
     mode: 0644
-  with_items:
+  loop:
     - { src: "rpmfusion-{{ rpmfusion_repository }}-updates.repo.j2",
         dst: "/etc/yum.repos.d/rpmfusion-{{ rpmfusion_repository }}-updates.repo" }
     - { src: "rpmfusion-{{ rpmfusion_repository }}-updates-testing.repo.j2",
         dst: "/etc/yum.repos.d/rpmfusion-{{ rpmfusion_repository }}-updates-testing.repo" }
+  loop_control:
+    label: "{{ item.src.split('.')[0] }}"
   when: rpmfusion_yum is success
 
 - name: Ensure that the rpmfusion gpg keys are installed
@@ -66,7 +68,7 @@
     enablerepo: "{{ rpmfusion_enablerepo|join(',') }}"
     name: "{{ item }}"
     state: present
-  with_items: "{{ rpmfusion_packages }}"
+  loop: "{{ rpmfusion_packages }}"
   when:
     - rpmfusion_packages|length > 0
     - rpmfusion_yum is success
